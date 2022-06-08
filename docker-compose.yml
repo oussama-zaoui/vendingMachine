@@ -7,10 +7,11 @@ services:
     depends_on:
       - PostgreSQL
     environment:
+      - SPRING_DATASOURCE_DRIVER-CLASS-NAME=org.postgresql.Driver
       - SPRING_DATASOURCE_URL=jdbc:postgresql://PostgreSQL:5432/vendingdb
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=password
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create
     volumes:
       - ./target:/app/target
 

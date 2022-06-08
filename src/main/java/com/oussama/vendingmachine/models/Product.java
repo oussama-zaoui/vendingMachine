@@ -8,20 +8,73 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_id")
     private long productId;
-
-    @Column(name = "product_name", nullable = false)
+    @OneToOne(fetch = FetchType.LAZY,optional = false)
+    @JoinColumn(nullable = false, name = "seller",referencedColumnName = "username")
+    private User user;
+    @Column(name = "productName", nullable = false)
     private String productName;
 
-    @Column(name = "amount_available", nullable = false)
+    @Column(name = "amountAvailable", nullable = false)
     private int amountAvailable;
 
     @Column(name = "cost", nullable = false)
     private double cost;
 
-    @OneToOne
-    @JoinColumn(name = "seller_id")
-    private User user;
 
+
+    public Product() {
+
+    }
+
+    public Product(User user){
+        this.user=user;
+    }
+
+    public Product(String productName, int amountAvailable, double cost, User user) {
+        this.productName = productName;
+        this.amountAvailable = amountAvailable;
+        this.cost = cost;
+        this.user = user;
+    }
+
+    public long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(long productId) {
+        this.productId = productId;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public int getAmountAvailable() {
+        return amountAvailable;
+    }
+
+    public void setAmountAvailable(int amountAvailable) {
+        this.amountAvailable = amountAvailable;
+    }
+
+    public double getCost() {
+        return cost;
+    }
+
+    public void setCost(double cost) {
+        this.cost = cost;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

@@ -1,6 +1,7 @@
 package com.oussama.vendingmachine.models;
 
 import net.bytebuddy.dynamic.loading.InjectionClassLoader;
+import org.springframework.data.annotation.Reference;
 
 import javax.persistence.*;
 
@@ -39,6 +40,12 @@ public class User {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+
+
+   public User(String username){
+        this.username=username;
     }
 
     public User() {

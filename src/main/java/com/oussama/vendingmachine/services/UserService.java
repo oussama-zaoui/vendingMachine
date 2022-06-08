@@ -19,14 +19,21 @@ public class UserService {
 
     }
 
-    public void insertUser(User user) {
+    public boolean insertUser(User user) {
         if (!userRepository.findById(user.getUsername()).isPresent()) {
             userRepository.save(user);
-        }
+            return true;
+        }else
+            return false;
+
     }
 
-    public void updateUser(User user) {
-        userRepository.save(user);
+    public boolean updateUser(User user) {
+        if (userRepository.findById(user.getUsername()).isPresent()) {
+            userRepository.save(user);
+            return true;
+        }else
+            return false;
     }
 
     public void deleteUserByUsername(String username) {

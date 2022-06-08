@@ -6,39 +6,53 @@ import com.oussama.vendingmachine.models.User;
 import com.oussama.vendingmachine.services.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
-@RequestMapping("/user")
+@RequestMapping(value = "/user", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserController {
     @Autowired
     public UserService userService;
 
 
     @GetMapping("/{username}")
-    public User getUser(@PathVariable String username) throws ResourceNotFoundException {
+    public ResponseEntity<User> getUser(@PathVariable String username) throws ResourceNotFoundException {
         User user = userService.getUserById(username);
         if (user == null) {
+            ResponseEntity.notFound();
             throw new ResourceNotFoundException("use not found");
         }
 
-        return user;
+        return ResponseEntity.of(Optional.of(user));
     }
 
 
     @PostMapping("/newUser")
-    public void newUser(@RequestBody User user) {
+    public ResponseEntity<String> newUser(@RequestBody User user) {
 
         if (user != null) {
-            userService.insertUser(user);
+           if(userService.insertUser(user)){
+               return new ResponseEntity<String>("user created succefully", HttpStatus.OK);
+           }
+
         }
+        return new ResponseEntity<String>("user already exist", HttpStatus.BAD_REQUEST);
     }
 
     @PatchMapping("/update")
-    public void updateUser(@RequestBody User user) {
+    public ResponseEntity<String> updateUser(@RequestBody User user) {
         if (user != null) {
-            userService.updateUser(user);
+            if(userService.updateUser(user)){
+                return new ResponseEntity<String>("user updated succefully",HttpStatus.OK);
+            }
+
         }
+        return new ResponseEntity<String>("user not found",HttpStatus.NOT_FOUND);
     }
 
 

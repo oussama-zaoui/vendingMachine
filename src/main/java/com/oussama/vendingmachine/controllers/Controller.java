@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class Controller {
 
     @GetMapping("/")
-    public String hello(){
+    public String hello() {
         return "hello world";
     }
 
     @GetMapping("/error")
-    public String error(){
+    public String error() {
         return "rout not found";
     }
 }

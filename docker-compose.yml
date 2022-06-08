@@ -1,7 +1,6 @@
 version: '3.1'
 services:
-  API:
-    image: 'vendingmachine'
+  api:
     build: .
     ports:
       - "8080:8080"
@@ -11,7 +10,9 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://PostgreSQL:5432/vendingdb
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=password
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=create
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    volumes:
+      - ./target:/app/target
 
   PostgreSQL:
     image: postgres
@@ -21,3 +22,5 @@ services:
       - POSTGRES_PASSWORD=password
       - POSTGRES_USER=postgres
       - POSTGRES_DB=vendingdb
+    volumes:
+      - ./db:/var/lib/postgresql

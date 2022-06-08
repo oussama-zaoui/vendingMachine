@@ -1,10 +1,19 @@
 package com.oussama.vendingmachine.repositorys;
 
 import com.oussama.vendingmachine.models.User;
-import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+import org.springframework.data.repository.CrudRepository;
+
+import java.util.Optional;
+
+public interface UserRepository extends CrudRepository<User, String> {
 
     @Override
-    User getReferenceById(Long aLong);
+    Optional<User> findById(String username);
+
+    @Override
+    <S extends User> S save(S entity);
+
+    @Override
+    void delete(User entity);
 }

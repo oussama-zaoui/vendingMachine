@@ -9,7 +9,7 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long productId;
-    @OneToOne(fetch = FetchType.LAZY,optional = false)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "seller",referencedColumnName = "username")
     private User user;
     @Column(name = "productName", nullable = false)

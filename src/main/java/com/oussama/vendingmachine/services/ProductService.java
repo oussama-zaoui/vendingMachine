@@ -2,8 +2,9 @@ package com.oussama.vendingmachine.services;
 
 
 import com.oussama.vendingmachine.models.Product;
-import com.oussama.vendingmachine.models.User;
 import com.oussama.vendingmachine.repositorys.ProductRepository;
+import com.oussama.vendingmachine.utils.Constant;
+import com.oussama.vendingmachine.utils.CurrentUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,43 +14,54 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    public Product getProduct(long product_id){
-        if (productRepository.findById(product_id).isPresent()){
+    public Product getProduct(long product_id) {
+        if (productRepository.findById(product_id).isPresent()) {
             return productRepository.findById(product_id).get();
         }
 
         return null;
     }
 
-    public boolean newProduct(Product product){
+    public int newProduct(Product product) {
         if (!productRepository.findById(product.getProductId()).isPresent()) {
             productRepository.save(product);
-            return true;
-        }else
-            return false;
+            return Constant.OK;
+        } else return Constant.BAD_REQUEST;
 
     }
 
-    public boolean updateProduct(Product product) {
-        if (productRepository.findById(product.getProductId()).isPresent()) {
-            productRepository.save(product);
-            return true;
-        }else
-            return false;
+    public int updateProduct(Product product) {
+        if(productRepository.findById(product.getProductId()).isPresent()){
+            if (isProductOwner(product.getProductId())) {
+                product.setUser(productRepository.findById(product.getProductId()).get().getUser());
+                productRepository.save(product);
+               return Constant.OK;
+            }else return Constant.FORBIDDEN;
+        }
+
+        return Constant.NOT_FOUND;
+
     }
 
-    public void deleteProductById(long product_id) {
+    public int deleteProductById(long product_id) {
         Product product = getProduct(product_id);
         if (product != null) {
-            productRepository.delete(product);
+            if (isProductOwner(product_id)) {
+                productRepository.delete(product);
+                return Constant.OK;
+            } else {
+                return Constant.FORBIDDEN;
+            }
+
         }
+        return Constant.NOT_FOUND;
+
+
     }
 
-    public Product getProductByProductName(Product product){
-       Product product1= productRepository.getProductByProductName(product.getProductName());
-       if (product1==null){
-           return product1;
-       }
-       else return null;
+    public boolean isProductOwner(long product_id) {
+        String owner = productRepository.getProductOwner(product_id);
+        return owner.equals(CurrentUser.getCurrentLoggedUser());
     }
+
 }

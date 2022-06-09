@@ -14,6 +14,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Override
     <S extends Product> S save(S entity);
 
-    @Query(value = "SELECT '*' FROM Product WHERE 'product_name'=productName")
-    Product getProductByProductName(String productName);
+    @Query(value = "SELECT seller from product where product_id=?1", nativeQuery = true)
+    String getProductOwner(long id);
 }

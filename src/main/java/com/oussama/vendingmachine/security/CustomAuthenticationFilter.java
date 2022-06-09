@@ -3,6 +3,7 @@ package com.oussama.vendingmachine.security;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.oussama.vendingmachine.utils.JsonMapper;
 import com.oussama.vendingmachine.utils.LoginInfo;
 import jdk.jfr.ContentType;
 import org.springframework.http.MediaType;
@@ -30,25 +31,23 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-
-         String username=request.getParameter("username");
-         String password=request.getParameter("password");
-
-        UsernamePasswordAuthenticationToken authenticationToken=new UsernamePasswordAuthenticationToken(username,password);
+        LoginInfo info = new LoginInfo();
+        info = (LoginInfo) JsonMapper.stringToJson(info, request);
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(info.getUsername(), info.getPassword());
         return authenticationManager.authenticate(authenticationToken);
     }
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-        User user= (User) authResult.getPrincipal();
+        User user = (User) authResult.getPrincipal();
         //not for a production project
-        Algorithm cryptoAlgo=Algorithm.HMAC256("thisIsASecretKey".getBytes());
-        String access_token= JWT.create()
+        Algorithm cryptoAlgo = Algorithm.HMAC256("thisIsASecretKey".getBytes());
+        String access_token = JWT.create()
                 .withSubject(user.getUsername())
                 .withIssuer(request.getRequestURL().toString())
-                .withClaim("roles",user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
+                .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(cryptoAlgo);
-        response.setHeader("access_token",access_token);
+        response.setHeader("access_token", access_token);
 
 
     }

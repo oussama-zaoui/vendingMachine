@@ -1,7 +1,6 @@
 package com.oussama.vendingmachine.security;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -42,6 +41,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers(HttpMethod.POST,"/login/**").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET,"/product/**").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.POST,"/product/**").hasAuthority("ROLE_seller");
+        http.authorizeRequests().antMatchers(HttpMethod.PATCH,"/product/**").hasAuthority("ROLE_seller");
+        http.authorizeRequests().antMatchers(HttpMethod.DELETE,"/product/**").hasAuthority("ROLE_seller");
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value = "/product" ,produces = MediaType.APPLICATION_JSON_VALUE )
+@RequestMapping(value = "/product", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ProductController {
 
     @Autowired
@@ -21,9 +21,9 @@ public class ProductController {
 
 
     @GetMapping("/{product_id}")
-    public ResponseEntity<Object> getProduct(@PathVariable long product_id){
-        Product product= productService.getProduct(product_id);
-        if(product!=null){
+    public ResponseEntity<Object> getProduct(@PathVariable long product_id) {
+        Product product = productService.getProduct(product_id);
+        if (product != null) {
             return ResponseEntity.of(Optional.of(product));
         }
 
@@ -32,10 +32,10 @@ public class ProductController {
 
 
     @PostMapping("/newProduct/{seller}")
-    public ResponseEntity<String> newProduct(@RequestBody Product product,@PathVariable String seller) {
+    public ResponseEntity<String> newProduct(@RequestBody Product product, @PathVariable String seller) {
         if (product != null) {
             product.setUser(new User(seller));
-            if(productService.newProduct(product)){
+            if (productService.newProduct(product)) {
                 return new ResponseEntity<String>("product created succefully", HttpStatus.OK);
             }
 
@@ -46,12 +46,12 @@ public class ProductController {
     @PatchMapping("/update")
     public ResponseEntity<String> updateProduct(@RequestBody Product product) {
         if (product != null) {
-            if(productService.updateProduct(product)){
-                return new ResponseEntity<String>("product updated succefully",HttpStatus.OK);
+            if (productService.updateProduct(product)) {
+                return new ResponseEntity<String>("product updated succefully", HttpStatus.OK);
             }
 
         }
-        return new ResponseEntity<String>("product not found",HttpStatus.NOT_FOUND);
+        return new ResponseEntity<String>("product not found", HttpStatus.NOT_FOUND);
     }
 
 

@@ -44,4 +44,12 @@ public class ProductService {
             productRepository.delete(product);
         }
     }
+
+    public Product getProductByProductName(Product product){
+       Product product1= productRepository.getProductByProductName(product.getProductName());
+       if (product1==null){
+           return product1;
+       }
+       else return null;
+    }
 }

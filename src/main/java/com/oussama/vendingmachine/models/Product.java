@@ -40,6 +40,8 @@ public class Product {
         this.user = user;
     }
 
+
+
     public long getProductId() {
         return productId;
     }

@@ -38,6 +38,7 @@ public class ProductController {
     public ResponseEntity<?> newProduct(@RequestBody Product product) {
         if (product != null) {
             product.setUser(new User(CurrentUser.getCurrentLoggedUser()));
+            if(product.getCost()%5!=0) return ResponseEntity.status(Constant.FORBIDDEN).body("price must be multiple of 5");
             return ResponseEntity.status(productService.newProduct(product)).build();
 
         }
@@ -47,7 +48,8 @@ public class ProductController {
     @PatchMapping("/update")
     public ResponseEntity<?> updateProduct(@RequestBody Product product) {
         if (product != null && product.getProductId()!=0) {
-                ResponseEntity.status(productService.updateProduct(product)).build();
+            if(product.getCost()%5!=0) return ResponseEntity.status(Constant.FORBIDDEN).body("price must be multiple of 5");
+            ResponseEntity.status(productService.updateProduct(product)).build();
         }
         return ResponseEntity.status(Constant.BAD_REQUEST).build();
     }

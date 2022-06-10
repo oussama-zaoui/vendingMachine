@@ -2,6 +2,7 @@ package com.oussama.vendingmachine.services;
 
 import com.oussama.vendingmachine.models.User;
 import com.oussama.vendingmachine.repositorys.UserRepository;
+import com.oussama.vendingmachine.utils.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,29 +30,31 @@ public class UserService implements UserDetailsService {
 
     }
 
-    public boolean insertUser(User user) {
-        if (!userRepository.findById(user.getUsername()).isPresent()) {
+    public int insertUser(User user) {
+        if (userRepository.findById(user.getUsername()).isEmpty()) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             userRepository.save(user);
-            return true;
+            return Constant.OK;
         }else
-            return false;
+            return Constant.FORBIDDEN;
 
     }
 
-    public boolean updateUser(User user) {
+    public int updateUser(User user) {
         if (userRepository.findById(user.getUsername()).isPresent()) {
             userRepository.save(user);
-            return true;
+            return Constant.OK;
         }else
-            return false;
+            return Constant.NOT_FOUND;
     }
 
-    public void deleteUserByUsername(String username) {
+    public int deleteUserByUsername(String username) {
         User user = getUserById(username);
         if (user != null) {
             userRepository.delete(user);
+            return Constant.OK;
         }
+        return Constant.NOT_FOUND;
     }
 
 

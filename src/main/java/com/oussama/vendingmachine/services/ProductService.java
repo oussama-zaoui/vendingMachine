@@ -23,11 +23,11 @@ public class ProductService {
     }
 
     public int newProduct(Product product) {
-        if (!productRepository.findById(product.getProductId()).isPresent()) {
+        if (!productRepository.findByName(product.getProductName()).isPresent()) {
             productRepository.save(product);
             return Constant.OK;
-        } else return Constant.BAD_REQUEST;
-
+        }
+        return Constant.FORBIDDEN;
     }
 
     public int updateProduct(Product product) {

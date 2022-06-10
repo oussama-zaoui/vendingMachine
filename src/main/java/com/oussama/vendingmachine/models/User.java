@@ -4,6 +4,7 @@ import net.bytebuddy.dynamic.loading.InjectionClassLoader;
 import org.springframework.data.annotation.Reference;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -62,6 +63,10 @@ public class User {
     private double deposit;
     @Column(name = "role", nullable = false)
     private String role;
+    @Column(name = "totalSpent")
+    private double totalSpend=0;
+    @ManyToMany
+    private List<Product> products;
 
 
 }

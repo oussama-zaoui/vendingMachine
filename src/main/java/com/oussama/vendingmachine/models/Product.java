@@ -12,7 +12,7 @@ public class Product {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "seller",referencedColumnName = "username")
     private User user;
-    @Column(name = "productName", nullable = false)
+    @Column(name = "productName", nullable = false,unique = true)
     private String productName;
 
     @Column(name = "amountAvailable", nullable = false)
@@ -20,6 +20,8 @@ public class Product {
 
     @Column(name = "cost", nullable = false)
     private double cost;
+
+
 
 
 

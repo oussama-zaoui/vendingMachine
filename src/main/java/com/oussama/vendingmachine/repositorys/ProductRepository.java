@@ -16,4 +16,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query(value = "SELECT seller from product where product_id=?1", nativeQuery = true)
     String getProductOwner(long id);
+
+    @Query(value = "SELECT * FROM product WHERE product_name LIKE ?1",nativeQuery = true)
+    Optional<Product> findByName(String productName);
 }

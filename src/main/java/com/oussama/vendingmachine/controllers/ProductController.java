@@ -1,10 +1,13 @@
 package com.oussama.vendingmachine.controllers;
 
 
+import com.oussama.vendingmachine.exceptions.ResourceNotFoundException;
 import com.oussama.vendingmachine.models.Product;
 import com.oussama.vendingmachine.models.User;
 import com.oussama.vendingmachine.services.ProductService;
 import com.oussama.vendingmachine.utils.Constant;
+import com.oussama.vendingmachine.utils.CurrentUser;
+import net.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,13 +34,11 @@ public class ProductController {
     }
 
 
-    @PostMapping("/newProduct/{seller}")
-    public ResponseEntity<?> newProduct(@RequestBody Product product, @PathVariable String seller) {
+    @PostMapping("/newProduct")
+    public ResponseEntity<?> newProduct(@RequestBody Product product) {
         if (product != null) {
-            product.setUser(new User(seller));
-            if (productService.newProduct(product) == Constant.OK) {
-                return ResponseEntity.status(Constant.OK).build();
-            }
+            product.setUser(new User(CurrentUser.getCurrentLoggedUser()));
+            return ResponseEntity.status(productService.newProduct(product)).build();
 
         }
         return ResponseEntity.status(Constant.BAD_REQUEST).build();
@@ -45,27 +46,16 @@ public class ProductController {
 
     @PatchMapping("/update")
     public ResponseEntity<?> updateProduct(@RequestBody Product product) {
-        if (product != null) {
-            int status = productService.updateProduct(product);
-            if (status == Constant.OK) {
-                return ResponseEntity.status(Constant.OK).build();
-            } else if (status == Constant.FORBIDDEN) {
-                return ResponseEntity.status(Constant.FORBIDDEN).build();
-            }
-
+        if (product != null && product.getProductId()!=0) {
+                ResponseEntity.status(productService.updateProduct(product)).build();
         }
-        return ResponseEntity.status(Constant.NOT_FOUND).build();
+        return ResponseEntity.status(Constant.BAD_REQUEST).build();
     }
 
 
     @DeleteMapping("/delete/{product_id}")
     public ResponseEntity<?> deleteProduct(@PathVariable long product_id) {
-        int status = productService.deleteProductById(product_id);
-        if (status == Constant.OK) {
-            return ResponseEntity.status(Constant.OK).body("success");
-        } else if (status == Constant.FORBIDDEN) return ResponseEntity.status(Constant.FORBIDDEN).build();
-
-        return ResponseEntity.status(Constant.OK).build();
+        return ResponseEntity.status(productService.deleteProductById(product_id)).build();
     }
 
 }

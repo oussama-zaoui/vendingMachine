@@ -51,6 +51,13 @@ public class UserController {
         return ResponseEntity.status(Constant.BAD_REQUEST).build();
     }
 
+    @PatchMapping("/deposit/{amount}")
+    public ResponseEntity<?> deposit(@PathVariable double amount){
+            if(userService.deposit(amount)==Constant.OK){
+                return ResponseEntity.ok().build();
+            }
+            return ResponseEntity.status(Constant.FORBIDDEN).body("amount should only be one of those (5, 10, 20, 50, 100)");
+    }
 
     @DeleteMapping("/delete/{username}")
     public ResponseEntity<?> deleteUser(@PathVariable String username) {

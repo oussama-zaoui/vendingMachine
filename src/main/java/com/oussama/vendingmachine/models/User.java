@@ -60,7 +60,7 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
     @Column(name = "deposit", nullable = false)
-    private double deposit;
+    private double deposit=0;
     @Column(name = "role", nullable = false)
     private String role;
     @Column(name = "totalSpent")

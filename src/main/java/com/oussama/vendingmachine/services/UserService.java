@@ -3,6 +3,7 @@ package com.oussama.vendingmachine.services;
 import com.oussama.vendingmachine.models.User;
 import com.oussama.vendingmachine.repositorys.UserRepository;
 import com.oussama.vendingmachine.utils.Constant;
+import com.oussama.vendingmachine.utils.CurrentUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -32,11 +34,12 @@ public class UserService implements UserDetailsService {
 
     public int insertUser(User user) {
         if (userRepository.findById(user.getUsername()).isEmpty()) {
+            if (user.getDeposit()!=0) return Constant.FORBIDDEN;
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             userRepository.save(user);
             return Constant.OK;
         }else
-            return Constant.FORBIDDEN;
+            return Constant.BAD_REQUEST;
 
     }
 
@@ -70,4 +73,18 @@ public class UserService implements UserDetailsService {
        authoritys.add(new SimpleGrantedAuthority(user.getRole()));
        return new  org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(),authoritys  );
     }
+
+
+    public int deposit(double amount){
+        System.out.println("this is the amount "+amount);
+        ArrayList<Double> allowedAmount=new ArrayList<>(List.of(5.0,10.0,20.0,50.0,100.0));
+        if (allowedAmount.contains(amount)){
+            User user=userRepository.findById(CurrentUser.getCurrentLoggedUser()).get();
+            user.setDeposit(user.getDeposit()+amount);
+            userRepository.save(user);
+            return Constant.OK;
+        }
+        return Constant.FORBIDDEN;
+    }
+
 }

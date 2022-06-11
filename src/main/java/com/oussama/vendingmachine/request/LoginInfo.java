@@ -1,4 +1,4 @@
-package com.oussama.vendingmachine.utils;
+package com.oussama.vendingmachine.request;
 
 public class LoginInfo {
     private String username;

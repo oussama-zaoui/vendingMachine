@@ -4,6 +4,8 @@ import net.bytebuddy.dynamic.loading.InjectionClassLoader;
 import org.springframework.data.annotation.Reference;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
@@ -55,18 +57,20 @@ public class User {
 
 
     @Id
+    @NotNull
+    @NotEmpty
     @Column(name = "username", nullable = false, unique = true)
     private String username;
+    @NotNull
+    @NotEmpty
     @Column(name = "password", nullable = false)
     private String password;
     @Column(name = "deposit", nullable = false)
     private double deposit=0;
+    @NotNull
+    @NotEmpty
     @Column(name = "role", nullable = false)
     private String role;
-    @Column(name = "totalSpent")
-    private double totalSpend=0;
-    @ManyToMany
-    private List<Product> products;
 
 
 }

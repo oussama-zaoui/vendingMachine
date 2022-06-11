@@ -5,18 +5,16 @@ import com.oussama.vendingmachine.models.User;
 
 import com.oussama.vendingmachine.services.UserService;
 
-import com.oussama.vendingmachine.utils.BuyOrder;
-import com.oussama.vendingmachine.utils.BuyResponse;
+import com.oussama.vendingmachine.request.BuyOrder;
+import com.oussama.vendingmachine.request.BuyResponse;
 import com.oussama.vendingmachine.utils.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
-import java.util.concurrent.CompletionService;
 
 @RestController
 @RequestMapping(value = "/user", produces = MediaType.APPLICATION_JSON_VALUE)

@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Optional;
 
 @RestController
@@ -35,7 +36,7 @@ public class ProductController {
 
 
     @PostMapping("/newProduct")
-    public ResponseEntity<?> newProduct(@RequestBody Product product) {
+    public ResponseEntity<?> newProduct(@Valid @RequestBody Product product) {
         if (product != null) {
             product.setUser(new User(CurrentUser.getCurrentLoggedUser()));
             if(product.getCost()%5!=0) return ResponseEntity.status(Constant.FORBIDDEN).body("price must be multiple of 5");
@@ -46,7 +47,7 @@ public class ProductController {
     }
 
     @PatchMapping("/update")
-    public ResponseEntity<?> updateProduct(@RequestBody Product product) {
+    public ResponseEntity<?> updateProduct(@Valid @RequestBody Product product) {
         if (product != null && product.getProductId()!=0) {
             if(product.getCost()%5!=0) return ResponseEntity.status(Constant.FORBIDDEN).body("price must be multiple of 5");
             ResponseEntity.status(productService.updateProduct(product)).build();

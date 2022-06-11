@@ -1,6 +1,7 @@
-package com.oussama.vendingmachine.utils;
+package com.oussama.vendingmachine.request;
 
 import com.oussama.vendingmachine.models.Product;
+import com.oussama.vendingmachine.utils.Constant;
 
 import java.util.ArrayList;
 
@@ -47,7 +48,7 @@ public class BuyResponse {
     }
 
     public void getChangeBack(double moneyLeft){
-        for(int i=Constant.allowedAmount.size()-1;i>=0;i--){
+        for(int i = Constant.allowedAmount.size()-1; i>=0; i--){
             while(moneyLeft>=Constant.allowedAmount.get(i)){
                 this.change.add(Constant.allowedAmount.get(i));
                 moneyLeft-=Constant.allowedAmount.get(i);

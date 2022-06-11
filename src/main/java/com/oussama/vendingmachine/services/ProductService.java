@@ -16,7 +16,9 @@ public class ProductService {
 
     public Product getProduct(long product_id) {
         if (productRepository.findById(product_id).isPresent()) {
-            return productRepository.findById(product_id).get();
+            Product product=productRepository.findById(product_id).get();
+            product.setUser(null);
+            return product;
         }
 
         return null;

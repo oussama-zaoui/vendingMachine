@@ -4,9 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oussama.vendingmachine.utils.JsonMapper;
-import com.oussama.vendingmachine.utils.LoginInfo;
-import jdk.jfr.ContentType;
-import org.springframework.http.MediaType;
+import com.oussama.vendingmachine.request.LoginInfo;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,6 +18,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -48,6 +47,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
         Algorithm cryptoAlgo = Algorithm.HMAC256("thisIsASecretKey".getBytes());
         String access_token = JWT.create()
                 .withSubject(user.getUsername())
+                .withExpiresAt(new Date(System.currentTimeMillis() * 20 * 60 * 1000))
                 .withIssuer(request.getRequestURL().toString())
                 .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(cryptoAlgo);

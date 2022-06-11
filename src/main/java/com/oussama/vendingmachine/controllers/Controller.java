@@ -8,11 +8,8 @@ public class Controller {
 
     @GetMapping("/")
     public String hello() {
-        return "hello world";
+        return "Vending machine";
     }
 
-    @GetMapping("/error")
-    public String error() {
-        return "rout not found";
-    }
+
 }

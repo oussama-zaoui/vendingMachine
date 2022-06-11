@@ -4,8 +4,8 @@ import com.oussama.vendingmachine.models.Product;
 import com.oussama.vendingmachine.models.User;
 import com.oussama.vendingmachine.repositorys.ProductRepository;
 import com.oussama.vendingmachine.repositorys.UserRepository;
-import com.oussama.vendingmachine.utils.BuyOrder;
-import com.oussama.vendingmachine.utils.BuyResponse;
+import com.oussama.vendingmachine.request.BuyOrder;
+import com.oussama.vendingmachine.request.BuyResponse;
 import com.oussama.vendingmachine.utils.Constant;
 import com.oussama.vendingmachine.utils.CurrentUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 @Service
 public class UserService implements UserDetailsService {

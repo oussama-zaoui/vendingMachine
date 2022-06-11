@@ -1,4 +1,4 @@
-package com.oussama.vendingmachine.utils;
+package com.oussama.vendingmachine.request;
 
 import com.oussama.vendingmachine.models.Product;
 import com.oussama.vendingmachine.models.User;

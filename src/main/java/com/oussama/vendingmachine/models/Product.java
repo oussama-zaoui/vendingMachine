@@ -1,6 +1,9 @@
 package com.oussama.vendingmachine.models;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "product")
@@ -12,12 +15,16 @@ public class Product {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false, name = "seller",referencedColumnName = "username")
     private User user;
+    @NotNull
+    @NotEmpty
     @Column(name = "productName", nullable = false,unique = true)
     private String productName;
-
+    @NotNull
+    @NotEmpty
     @Column(name = "amountAvailable", nullable = false)
     private int amountAvailable;
-
+    @NotNull
+    @NotEmpty
     @Column(name = "cost", nullable = false)
     private double cost;
 

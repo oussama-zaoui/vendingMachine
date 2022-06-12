@@ -5,17 +5,17 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - PostgreSQL
+      - db
     environment:
       - SPRING_DATASOURCE_DRIVER-CLASS-NAME=org.postgresql.Driver
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://PostgreSQL:5432/vendingdb
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/vendingdb
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=password
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=create
     volumes:
       - ./target:/app/target
 
-  PostgreSQL:
+  db:
     image: postgres
     ports:
       - "5432:5432"

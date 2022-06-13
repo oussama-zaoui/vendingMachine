@@ -1,0 +1,3 @@
+#!/bin/sh
+
+docker compose start db  && ./mvnw clean install  && docker-compose build --no-cache && docker-compose up

@@ -12,6 +12,11 @@ public class BuyOrder {
 
     }
 
+    public BuyOrder(long productId,int amountOfProduct){
+        this.productId=productId;
+        this.amountOfProduct=amountOfProduct;
+    }
+
     public int getAmountOfProduct() {
         return amountOfProduct;
     }

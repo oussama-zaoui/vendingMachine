@@ -1,9 +1,9 @@
 package com.oussama.vendingmachine.models;
 
+import org.hibernate.validator.constraints.Range;
+
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 
 @Entity
 @Table(name = "product")
@@ -20,11 +20,11 @@ public class Product {
     @Column(name = "productName", nullable = false,unique = true)
     private String productName;
     @NotNull
-    @NotEmpty
+    @Min(value = 1)
     @Column(name = "amountAvailable", nullable = false)
     private int amountAvailable;
     @NotNull
-    @NotEmpty
+    @DecimalMin(value = "5.0")
     @Column(name = "cost", nullable = false)
     private double cost;
 
@@ -40,11 +40,10 @@ public class Product {
         this.user=user;
     }
 
-    public Product(String productName, int amountAvailable, double cost, User user) {
+    public Product(String productName, int amountAvailable, double cost) {
         this.productName = productName;
         this.amountAvailable = amountAvailable;
         this.cost = cost;
-        this.user = user;
     }
 
 

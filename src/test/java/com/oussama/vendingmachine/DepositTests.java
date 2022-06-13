@@ -1,13 +1,15 @@
 package com.oussama.vendingmachine;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.oussama.vendingmachine.models.Product;
+import com.oussama.vendingmachine.models.User;
+import com.oussama.vendingmachine.services.ProductService;
 import com.oussama.vendingmachine.services.UserService;
 import com.oussama.vendingmachine.utils.Constant;
-import com.oussama.vendingmachine.utils.JsonMapper;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,29 +28,32 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class VendingmachineApplicationTests {
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class DepositTests {
 
 	@Autowired
 	UserService userService;
 
 	@Autowired
+	ProductService productService;
+
+	@Autowired
 	MockMvc mockMvc;
 
-
-
-
-	String login() throws Exception {
-		Map<String,String> loginForm=new HashMap<>();
-		loginForm.put("password","oussama");
-		loginForm.put("username","oussama");
-		MvcResult result=mockMvc.perform( MockMvcRequestBuilders.post("/login")
-				.contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON)
-				.content(new ObjectMapper().writeValueAsString(loginForm))
-
-		).andExpect(status().isOk()).andReturn();
-		return result.getResponse().getContentAsString();
+	/** this methode is executed before all tests to populate db with some users; **/
+	@BeforeAll
+	 void populateDb(){
+		User seller_user=new User("oussama","oussama","ROLE_seller");
+		User buyer_user=new User("karim","karim","ROLE_buyer");
+		userService.insertUser(seller_user);
+		userService.insertUser(buyer_user);
+		Product product=new Product("coca",40,5.0);
+		product.setUser(seller_user);
+		productService.newProduct(product);
 	}
+
+
+
 
 	@Test
 	@WithMockUser(username = "karim")
@@ -63,7 +69,7 @@ class VendingmachineApplicationTests {
 
 	@Test
 	void deposit_seller_authorization() throws Exception {
-		JsonNode parent= new ObjectMapper().readTree(login());
+		JsonNode parent= new ObjectMapper().readTree(LoginPerform.login(mockMvc,"karim","karim"));
 		String token = parent.path("access_token").asText();
 		mockMvc.perform( MockMvcRequestBuilders.patch("/user/deposit/100")
 				.header("Authorization","Bearer "+token)

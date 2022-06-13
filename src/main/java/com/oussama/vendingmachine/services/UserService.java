@@ -85,7 +85,6 @@ public class UserService implements UserDetailsService {
 
 
     public int deposit(double amount) {
-        System.out.println("this is the amount " + amount);
         if (Constant.allowedAmount.contains(amount)) {
             User user = userRepository.findById(CurrentUser.getCurrentLoggedUser()).get();
             user.setDeposit(user.getDeposit() + amount);
@@ -103,7 +102,9 @@ public class UserService implements UserDetailsService {
     }
 
     public BuyResponse buy(BuyOrder order) {
-        Product product = productService.getProduct(order.getProductId());
+        if (productRepository.findById(order.getProductId()).isEmpty()) return null;
+        Product product = productRepository.findById(order.getProductId()).get();
+        System.out.println("this the seller from buy function"+product.getUser().getUsername());
         User user = getUserById(CurrentUser.getCurrentLoggedUser());
         if (order.isValid(product.getAmountAvailable(), user.getDeposit(), product.getCost())) {
             double moneyLeft = user.getDeposit() - (product.getCost() * order.getAmountOfProduct());

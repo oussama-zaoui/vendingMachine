@@ -9,8 +9,8 @@ This is a vending machine api
 ``` console
  git clone https://github.com/oussama-zaoui/vendingMachine
  cd vendingMachine
- chmod +x run
- ./run
+ chmod +x run.tests
+ ./run.tests
 ```
 
 
